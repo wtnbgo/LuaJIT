@@ -1,0 +1,223 @@
+{
+    "version": 2,
+    "configurePresets": [
+        {
+            "name": "default",
+            "displayName": "Default Config",
+            "description": "Default build using Ninja generator",
+            "generator": "Ninja",
+            "binaryDir": "$env{BUILD_DIR}",
+            "environment": {
+                "BUILD_DIR": "build/${presetName}/$env{BUILD_TYPE}"
+            },
+            "cacheVariables": {
+                "CMAKE_CXX_STANDARD":"17",
+                "CMAKE_CXX_STANDARD_REQUIRED":"ON",
+                "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+            }
+        },
+        {
+            "name": "x86-windows",
+            "description": "windows x86 build",
+            "inherits": "default",
+            "architecture": {
+                "value": "x86",
+                "strategy": "external"
+            },
+            "cacheVariables": {
+                "CMAKE_C_COMPILER":"cl",
+                "CMAKE_MSVC_RUNTIME_LIBRARY":"MultiThreaded$<$<CONFIG:Debug>:Debug>",
+                "VCPKG_TARGET_TRIPLET":"x86-windows-static",
+                "VCPKG_TARGET_ARCHITECTURE":"x86",
+                "VCPKG_CRT_LINKAGE":"static",
+                "VCPKG_LIBRARY_LINKAGE":"static"
+            }
+        },
+        {
+            "name": "x64-windows",
+            "description": "windows x64 build",
+            "inherits": "default",
+            "architecture": {
+                "value": "x64",
+                "strategy": "external"
+            },
+            "cacheVariables": {
+                "CMAKE_C_COMPILER":"cl",
+                "CMAKE_MSVC_RUNTIME_LIBRARY":"MultiThreaded$<$<CONFIG:Debug>:Debug>",
+                "VCPKG_TARGET_TRIPLET":"x64-windows-static",
+                "VCPKG_TARGET_ARCHITECTURE":"x64",
+                "VCPKG_CRT_LINKAGE":"static",
+                "VCPKG_LIBRARY_LINKAGE":"static"
+            }
+        },
+        {
+            "name": "x64-linux",
+            "displayName": "for linux x64",
+            "description": "linux x64 build",
+            "inherits": "default",
+            "architecture": {
+                "value": "x64",
+                "strategy": "external"
+            },
+            "cacheVariables": {
+                "VCPKG_TARGET_TRIPLET":"x64-linux",
+                "VCPKG_TARGET_ARCHITECTURE":"x64",
+                "VCPKG_CRT_LINKAGE":"dynamic",
+                "VCPKG_LIBRARY_LINKAGE":"static"
+            }
+        },
+        {
+            "name": "osx",
+            "displayName": "for osx",
+            "inherits": "default",
+            "cacheVariables": {
+                "VCPKG_CRT_LINKAGE":"dynamic",
+                "VCPKG_LIBRARY_LINKAGE":"static"
+            }
+        },
+        {
+            "name": "x64-osx",
+            "displayName": "for osx x64",
+            "description": "osx x64 build",
+            "inherits": "osx",
+            "cacheVariables": {
+                "VCPKG_TARGET_TRIPLET":"x64-osx",
+                "VCPKG_TARGET_ARCHITECTURE":"x64"
+            }
+        },
+        {
+            "name": "arm64-osx",
+            "displayName": "for osx arm64",
+            "description": "osx arm64 build",
+            "inherits": "osx",
+            "cacheVariables": {
+                "VCPKG_TARGET_TRIPLET":"arm64-osx",
+                "VCPKG_TARGET_ARCHITECTURE":"arm64"
+            }
+        },
+        {
+            "name": "android",
+            "displayName": "for android",
+            "inherits": "default",
+            "cacheVariables": {
+                "CMAKE_SIZEOF_VOID_P_OVERRIDE":"8",
+                "VCPKG_CHAINLOAD_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/toolchains/android.cmake",
+                "VCPKG_CRT_LINKAGE":"static",
+                "VCPKG_LIBRARY_LINKAGE":"static",
+                "CMAKE_SHARED_LINKER_FLAGS":"-Wl,--gc-sections",
+                "ANDROID_PLATFORM":"android-29",
+                "ANDROID_STL":"c++_static"
+            }
+        },
+        {
+            "name": "arm64-android",
+            "displayName": "for android arm64",
+            "description": "android arm64 build",
+            "inherits": "android",
+            "cacheVariables": {
+                "VCPKG_TARGET_TRIPLET":"arm64-android",
+                "VCPKG_TARGET_ARCHITECTURE":"arm64",
+                "ANDROID_ABI":"arm64-v8a"
+            }
+        },
+        {
+            "name": "x64-android",
+            "displayName": "for android x64",
+            "description": "android x64 build",
+            "inherits": "android",
+            "cacheVariables": {
+                "VCPKG_TARGET_TRIPLET":"x64-android",
+                "VCPKG_TARGET_ARCHITECTURE":"x64",
+                "ANDROID_ABI":"x86_64"
+            }
+        },
+        {
+            "name": "arm64-nx",
+            "displayName": "for nx arm64",
+            "description": "nx arm64 build",
+            "inherits": "default",
+            "architecture": {
+                "value": "arm64",
+                "strategy": "external"
+            },
+            "cacheVariables": {
+                "VCPKG_CHAINLOAD_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/toolchains/nx.cmake",
+                "VCPKG_TARGET_TRIPLET":"arm64-nx",
+                "VCPKG_TARGET_ARCHITECTURE":"arm64",
+                "VCPKG_CRT_LINKAGE":"dynamic",
+                "VCPKG_LIBRARY_LINKAGE":"static",
+                "VCPKG_CMAKE_SYSTEM_NAME":"NX",
+                "VCPKG_ENV_PASSTHROUGH":"NINTENDO_SDK_ROOT",
+                "LUAJIT_DISABLE_JIT":"ON",
+                "LUAJIT_DISABLE_FFI":"ON",
+                "LUAJIT_USE_SYSMALLOC":"ON",
+                "BUILD_SHARED_LIBS":"OFF",
+                "TARGET_TESTARCH":"LJ_TARGET_ARM64 1 LJ_LE 1 LJ_ARCH_BITS 64 LJ_ARCH_HASFPU 1 LJ_ABI_SOFTFP 0 LJ_HASJIT 0 LJ_HASFFI 0"
+            }
+        },
+        {
+            "name": "x64-prospero",
+            "displayName": "for PS5",
+            "description": "PS5 build",
+            "inherits": "default",
+            "architecture": {
+                "value": "x64",
+                "strategy": "external"
+            },
+            "cacheVariables": {
+                "VCPKG_CHAINLOAD_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/toolchains/prospero.cmake",
+                "VCPKG_TARGET_TRIPLET":"x64-prospero",
+                "VCPKG_TARGET_ARCHITECTURE":"x64",
+                "VCPKG_CRT_LINKAGE":"dynamic",
+                "VCPKG_LIBRARY_LINKAGE":"static",
+                "VCPKG_CMAKE_SYSTEM_NAME":"PROSPERO",
+                "VCPKG_ENV_PASSTHROUGH":"SCE_PROSPERO_SDK_DIR",
+                "LUAJIT_DISABLE_JIT":"ON",
+                "LUAJIT_DISABLE_FFI":"ON",
+                "LUAJIT_USE_SYSMALLOC":"ON",
+                "BUILD_SHARED_LIBS":"OFF",
+                "TARGET_TESTARCH":"LJ_TARGET_X64 1 LJ_LE 1 LJ_ARCH_BITS 64 LJ_ARCH_HASFPU 1 LJ_ABI_SOFTFP 0 LJ_HASJIT 0 LJ_HASFFI 0 LJ_FR2 0 LJ_NO_UNWIND 1"
+            }
+        }
+
+    ],
+
+    "buildPresets": [
+        {
+            "name": "x86-windows",
+            "configurePreset": "x86-windows"
+        },
+        {
+            "name": "x64-windows",
+            "configurePreset": "x64-windows"
+        },
+        {
+            "name": "x64-linux",
+            "configurePreset": "x64-linux"
+        },
+        {
+            "name": "x64-osx",
+            "configurePreset": "x64-osx"
+        },
+        {
+            "name": "arm64-osx",
+            "configurePreset": "arm64-osx"
+        },
+        {
+            "name": "arm64-android",
+            "configurePreset": "arm64-android"
+        },
+        {
+            "name": "x64-android",
+            "configurePreset": "x64-android"
+        },
+        {
+            "name": "arm64-nx",
+            "configurePreset": "arm64-nx"
+        },
+        {
+            "name": "x64-prospero",
+            "configurePreset": "x64-prospero"
+        }
+    ]
+}
